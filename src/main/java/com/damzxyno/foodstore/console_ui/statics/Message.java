@@ -23,7 +23,7 @@ public final class Message {
     public static final String ADMIN_PRODUCT_OPTION = "[1] Previous Page \t [2] Next Page \t [3] Delete Product \t[4] Edit Product \t[5] Add new product \t[0] Exit";
     public static final String ADMIN_DASHBOARD_OPTIONS = "[1] Products Management Dashboard \n[2] Customer Management Dashboard \n[0] Exit";
     public static final String ADMIN_PRODUCT_DASHBOARD_OPTIONS = "[1] View all products \n[2] View Product by Id \n[3] Edit Product by Id \n[4] Delete Product by Id \n[5] Add new Product \n[6] Back \n[0] Exit";
-    public static final String ADMIN_CUSTOMER_DASHBOARD_OPTIONS = "[1] View all Customers \n[2] View Customer by Id \n[0] Exit";
+    public static final String ADMIN_CUSTOMER_DASHBOARD_OPTIONS = "[1] View all Customers \n[2] View Customer by Id  \n[3] Back \n[0] Exit";
     public static final String LOGIN_ATTEMPT_EXHAUSTION = "You have exhausted the allocated login attempts!";
     public static final String CUSTOMER_ACCOUNT_CREATION_ATTEMPT_EXHAUSTION = "You have exhausted the allocated account creation attempts!";
     public static final String INPUT_ATTEMPT_EXHAUSTION = "You have exhausted the allocated input attempts!";

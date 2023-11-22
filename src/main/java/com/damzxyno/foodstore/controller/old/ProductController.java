@@ -1,4 +1,4 @@
-package com.damzxyno.foodstore.controller;
+package com.damzxyno.foodstore.controller.old;
 
 import com.damzxyno.foodstore.dto.request.product.ProductCreationRequest;
 import com.damzxyno.foodstore.dto.request.product.ProductModificationRequest;

@@ -1,4 +1,4 @@
-package com.damzxyno.foodstore.controller;
+package com.damzxyno.foodstore.controller.old;
 
 import com.damzxyno.foodstore.dto.request.cart.CartItemCreationDTO;
 import com.damzxyno.foodstore.dto.request.product.ProductCreationRequest;
@@ -6,13 +6,20 @@ import com.damzxyno.foodstore.dto.response.cart.PaginatedCartItemResponse;
 import com.damzxyno.foodstore.service.interfaces.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("cart")
 public class CartController {
     private final CartService cartService;
+
+    @GetMapping("/signup")
+    public String showSignUpForm() {
+        return "add-user";
+    }
+
 
     @GetMapping("/{custId}")
     public ResponseEntity<PaginatedCartItemResponse> getAllCartItems(

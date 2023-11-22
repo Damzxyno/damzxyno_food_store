@@ -17,7 +17,6 @@ import static com.damzxyno.foodstore.console_ui.statics.Message.*;
 public class ConsoleIOManager {
     private final Scanner scanner;
     private static final Set<String> exitCharacters = new HashSet<>(List.of("e", "0", "exit"));
-    public static final String ANSI_RESET = "\u001B[0m";
 
     /**
      * This method prints to the screen with a default colour of GREEN.
@@ -33,7 +32,7 @@ public class ConsoleIOManager {
      * @param word The sentence/ word to print to the screen.
      */
     public void write(Colour color, String word){
-        System.out.println(color.getCode() + word + ANSI_RESET);
+        System.out.println(color.getCode() + word + Colour.RESET);
     }
 
     /**
@@ -44,7 +43,7 @@ public class ConsoleIOManager {
      * @param arr The parameters to format the word.
      */
     public void write(Colour color, String word, Object ...arr){
-        write( color,  String.format(word, arr) + ANSI_RESET);
+        write( color,  String.format(word, arr));
     }
 
     /**
@@ -54,7 +53,7 @@ public class ConsoleIOManager {
      * @param arr The parameters to format the word.
      */
     public void write(String word, Object ...arr){
-        write( String.format(word, arr) + ANSI_RESET);
+        write( String.format(word, arr));
     }
 
     /**

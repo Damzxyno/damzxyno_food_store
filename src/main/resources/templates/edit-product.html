@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Edit Product ' + ${product.getDescription()}" />
+</head>
+<body>
+<form th:action="@{'/update/' + ${product.id}}" th:object="${product}" method="post">
+    <table border="2">
+        <thead>
+        <tr>
+            <th>Product No</th>
+            <th>SKU</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Action</th> <!-- New column for buttons -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <input type="text" th:field="*{id}" th:value="${product.id}" readonly="readonly" />
+            </td>
+            <td>
+                <input type="text" th:field="*{SKU}" th:value="${product.SKU}" />
+            </td>
+            <td>
+                <input type="text" th:field="*{category}" th:value="${product.category}" />
+            </td>
+            <td>
+                <input type="text" th:field="*{description}" th:value="${product.description}" />
+            </td>
+            <td>
+                <input type="text" th:field="*{price}" th:value="${product.price}" />
+            </td>
+            <td>
+                <!-- Edit Button -->
+                <button type="submit">Update</button>
+
+                <!-- Delete Button (using a form for safety) -->
+                <form th:action="@{'/delete/' + ${product.id}}" method="POST">
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+
+</body>
+</html>

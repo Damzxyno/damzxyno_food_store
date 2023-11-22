@@ -9,6 +9,7 @@ import com.damzxyno.foodstore.dto.request.identity.LoginRequest;
 import com.damzxyno.foodstore.dto.request.product.ProductCreationRequest;
 import com.damzxyno.foodstore.dto.request.product.ProductModificationRequest;
 import com.damzxyno.foodstore.dto.response.cart.CartProductResponse;
+import com.damzxyno.foodstore.dto.response.customer.CustomerDetailsResponse;
 import com.damzxyno.foodstore.dto.response.product.PaginatedProductsResponse;
 import com.damzxyno.foodstore.dto.response.product.ProductDetailsResponse;
 import com.damzxyno.foodstore.enums.ProductCategory;
@@ -246,17 +247,36 @@ public class ConsoleApp {
         io.write(ADMIN_CUSTOMER_MANAGEMENT_DASHBOARD_MESSAGE, sessionData.getUsername());
         io.write(Message.DELIMETER_IV);
         io.write(ADMIN_CUSTOMER_DASHBOARD_OPTIONS);
-        var option = io.readNumber(3, 1, 2, false);
+        var option = io.readNumber(3, 1, 3, false);
+        var back = false;
         switch (option){
             case 1 -> adminViewAllCustomerAction();
             case 2 -> adminViewCustomerByIdAction();
+            case 3 -> back = true;
+        }
+        if (back){
+            adminOptionsAction();
+        } else {
+            adminProductDashboardAction();
         }
     }
 
     private void adminViewCustomerByIdAction() {
+        io.write("Input customer's Id");
+        var input = io.readNumber(3, 1, Integer.MAX_VALUE, false);
+        var customer = customerService.getCustomerById((long) input);
+        if (customer.isEmpty()){
+            io.writeError("Customer with Id does not exist!");
+            return;
+        }
+        var formatCustomer = formatCustomer(List.of(customer.get()));
+        io.write(formatCustomer);
     }
 
     private void adminViewAllCustomerAction() {
+        var customers = customerService.getAll();
+        var formatCustomer = formatCustomer(customers);
+        io.write(formatCustomer);
     }
 
     private void adminProductDashboardAction() {
@@ -508,6 +528,28 @@ public class ConsoleApp {
                     product.getDescription(),
                     product.getCategory(),
                     gbpFormatter.format(product.getPrice())));
+        }
+        return solution.toString().trim();
+    }
+
+    /**
+     * This method formats the products list into a table.
+     * @param customers This is a list of all products that should be contained in the table.
+     * @return a string witht eh products well formatted.
+     */
+    private String formatCustomer(List<CustomerDetailsResponse> customers){
+        var format = "%d| %-5s | %-10s%n";
+        var hFormat = "%s| %-5s | %-10s%n";
+        var solution = new StringBuilder();
+        solution.append(DELIMETER_II+"\n");
+        solution.append("===PRODUCT LIST===\n");
+        solution.append(DELIMETER_II + "\n");
+        solution.append(String.format(hFormat, "NO", "Username"));
+        for(int i = 0; i < customers.size(); i++) {
+            var customer = customers.get(i);
+            solution.append(String.format(format,
+                    i + 1,
+                    customer.getUsername()));
         }
         return solution.toString().trim();
     }

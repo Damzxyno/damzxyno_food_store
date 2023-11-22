@@ -10,7 +10,7 @@ public class FoodStoreApplication {
     public static void main(String[] args) {
         var context = SpringApplication.run(FoodStoreApplication.class, args);
         ConsoleApp consoleApp = context.getBean(ConsoleApp.class);
-        consoleApp.run();
+//        consoleApp.run();
     }
 
 }
