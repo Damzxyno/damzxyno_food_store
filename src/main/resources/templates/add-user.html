@@ -2,17 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Account Creation</title>
 </head>
 <body>
-<form action="#" th:action="@{/adduser}" th:object="${user}" method="post">
-    <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="Name">
-    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-    <label for="email">Email</label>
-    <input type="text" th:field="*{email}" id="email" placeholder="Email">
-    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-    <input type="submit" value="Add User">
+<h2>Customer Account Creation</h2>
+<form th:action="@{/identity/create-account}" th:object="${customerCreationRequest}" method="post">
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" th:field="*{username}" required/>
+
+    <br/>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" th:field="*{password}" required/>
+
+    <br/>
+
+    <label for="addressLine1">Address Line 1:</label>
+    <input type="text" id="addressLine1" th:field="*{address.line1}" required/>
+
+    <br/>
+
+    <label for="addressLine2">Address Line 2:</label>
+    <input type="text" id="addressLine2" th:field="*{address.line2}"/>
+
+    <br/>
+
+    <label for="addressLine3">Address Line 3:</label>
+    <input type="text" id="addressLine3" th:field="*{address.line3}"/>
+
+    <br/>
+
+    <button type="submit">Create Account</button>
+
 </form>
 
 </body>

@@ -1,0 +1,15 @@
+<div th:fragment="header">
+  <h1>Welcome to Damzxyno's Food store</h1>
+  <nav>
+    <a th:href="'/products'">Product</a>
+    <a th:href="'/customers'">Customers</a>
+  </nav>
+</div>
+
+<div th:fragment="product_search">
+  <form th:action="@{'/products'}" method="GET">
+    <label for="searchQuery">Search:</label>
+    <input type="text" id="searchQuery" name="search" th:value="${searchQuery}" />
+    <button type="submit">Search</button>
+  </form>
+</div>

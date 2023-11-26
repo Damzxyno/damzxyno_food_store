@@ -40,7 +40,8 @@ public class ProductServiceImpl implements ProductService {
     public Optional<ProductDetailsResponse> getProductById(Long id){
         var product = prodRepo.findById(id);
         if (product.isPresent()){
-            return Optional.ofNullable(mapper.map(product, ProductDetailsResponse.class));
+            var res = mapper.map(product, ProductDetailsResponse.class);
+            return Optional.ofNullable(res);
         }
         return Optional.empty();
     }
@@ -81,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
         } else if (category != null){
             products = prodRepo.findAllByCategoryContaining(category,pageable);
         } else if (search != null){
-            products = prodRepo.findAllByDescriptionContaining(Arrays.stream(search.split(" ")).toList(),pageable);
+            products = prodRepo.findAllByDescriptionContaining(search,pageable);
         } else {
             products = prodRepo.findAll(pageable);
         }

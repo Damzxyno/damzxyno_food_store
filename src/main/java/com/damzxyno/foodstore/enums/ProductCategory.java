@@ -8,8 +8,6 @@ public enum ProductCategory {
     FRUIT,
     FISH,
     GRAIN,
-    SEAFOOD,
     POULTRY,
-    LEGUME,
-    PASTA,
+    PASTA
 }

@@ -8,13 +8,15 @@
     <table border="red solid 2px">
     <thead>
         <tr>
+            <th>Index</th>
             <th>Customer Username</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
-    <tr th:each="C: ${customers}">
-        <td th:text="${C.username}" />
+    <tr th:each="customer, stat : ${customers}">
+        <td th:text="${stat.index + 1}" />
+        <td th:text="${customer.username}" />
         <td>
             <button>
 

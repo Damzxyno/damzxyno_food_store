@@ -32,7 +32,7 @@ public class ConsoleIOManager {
      * @param word The sentence/ word to print to the screen.
      */
     public void write(Colour color, String word){
-        System.out.println(color.getCode() + word + Colour.RESET);
+        System.out.println(color.getCode() + word + Colour.RESET.getCode());
     }
 
     /**
@@ -119,7 +119,7 @@ public class ConsoleIOManager {
         }
         int val = 0;
         try{
-            val = Integer.parseInt(scanner.next());
+            val = Integer.parseInt(scanner.nextLine());
         } catch (Exception e){
             writeWarning(INVALID_OPTION);
             writeWarning(NUMERIC_VALUE_REQUIRED_WARNING);

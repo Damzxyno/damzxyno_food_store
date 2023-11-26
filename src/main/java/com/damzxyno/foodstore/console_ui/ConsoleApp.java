@@ -20,13 +20,11 @@ import com.damzxyno.foodstore.service.interfaces.IdentityService;
 import com.damzxyno.foodstore.service.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static com.damzxyno.foodstore.console_ui.statics.Message.*;
 
 @Component
@@ -49,7 +47,6 @@ public class ConsoleApp {
      * This is the entrypoint into the ConsoleApp Application
      */
     public void run(){
-        welcomeAction();
         loginAction(3, false);
         if (sessionData.getUserType().equals(UserType.ADMIN)){
             adminOptionsAction();
@@ -65,8 +62,8 @@ public class ConsoleApp {
         io.write("\n");
         customerWelcomeAction();
         io.write(CUSTOMER_DASHBOARD_OPTIONS);
-        io.write(PICK_AN_OPTION);
-        io.write(DELIMETER_V);
+        io.write(Colour.CYAN, PICK_AN_OPTION);
+        io.write(DELIMETER_II);
         var option = io.readNumber(4, 1, 4, false);
         switch (option){
             case 1 -> {
@@ -101,11 +98,11 @@ public class ConsoleApp {
             return;
         }
         io.write("\n");
-        io.write(DELIMETER_I);
+        io.write(Message.DELIMETER_I);
         io.write("::WELCOME TO YOUR CART, (%s)::", sessionData.getUsername());
-        io.write(DELIMETER_I);
+        io.write(Message.DELIMETER_I);
         io.write(formatCartProducts(cartItems.getProducts()));
-        io.write(String.format("[CURRENT PAGE NO: %s] :: [TOTAL PAGES: %s,] - [TOTAL PRODUCTS: %s]",
+        io.write(String.format(PRODUCT_META_INFO,
                 cartItems.getCurrentPage(),
                 cartItems.getTotalPages(),
                 cartItems.getTotalItems()));
@@ -133,6 +130,10 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * This method help remove an item away from the customer's cart
+     * @param productId is the id of the product to be removed.
+     */
     private void removeCustomerCartItemAction(long productId) {
         if (productId == 0){
             io.write("What is the product Id?");
@@ -142,6 +143,9 @@ public class ConsoleApp {
         io.writeSuccess(ITEM_REMOVED_FROM_CART_SUCCESS);
     }
 
+    /**
+     * This method help checkout a customer's cart
+     */
     private void customerCheckoutAction() {
         var cartPrice = cartService.getCartItemsForCustomer(sessionData.getUserId(), 1, 99)
                 .getProducts()
@@ -236,16 +240,23 @@ public class ConsoleApp {
         adminWelcomeAction();
         io.write(ADMIN_DASHBOARD_OPTIONS);
         var option = io.readNumber(4, 1, 6, false);
+        var back = false;
         switch (option) {
             case 1 -> adminProductDashboardAction();
             case 2 -> adminCustomerManagementDashboard();
+            case 3 -> back = true;
+        }
+        if (back){
+            run();
+        } else {
+            adminOptionsAction();
         }
     }
 
     private void adminCustomerManagementDashboard() {
-        io.write(Message.DELIMETER_IV);
+        io.write(Message.DELIMETER_I);
         io.write(ADMIN_CUSTOMER_MANAGEMENT_DASHBOARD_MESSAGE, sessionData.getUsername());
-        io.write(Message.DELIMETER_IV);
+        io.write(Message.DELIMETER_I);
         io.write(ADMIN_CUSTOMER_DASHBOARD_OPTIONS);
         var option = io.readNumber(3, 1, 3, false);
         var back = false;
@@ -280,9 +291,9 @@ public class ConsoleApp {
     }
 
     private void adminProductDashboardAction() {
-        io.write(Message.DELIMETER_IV);
+        io.write(Message.DELIMETER_I);
         io.write(ADMIN_PRODUCT_MANAGEMENT_DASHBOARD_MESSAGE, sessionData.getUsername());
-        io.write(Message.DELIMETER_IV);
+        io.write(Message.DELIMETER_I);
         io.write(ADMIN_PRODUCT_DASHBOARD_OPTIONS);
         var option = io.readNumber(3, 1, 6, false);
         boolean back = false;
@@ -302,6 +313,7 @@ public class ConsoleApp {
     }
 
     private void adminDeleteProductByIdAction(long productId) {
+        io.write(Colour.CYAN,DELETE_PRODUCT_PROMPT);
         if (productId == 0){
             io.write("What is the product Id?");
             productId = io.readNumber(3, 1, Integer.MAX_VALUE, false);
@@ -322,7 +334,7 @@ public class ConsoleApp {
     private String sortCategory(Map<Integer, ProductCategory> map){
         var sb = new StringBuilder();
         sb.append("[1] None/ Remain unchanged");
-        for(int i = 2; i < map.size() - 2; i++){
+        for(int i = 2; i < map.size(); i++){
             sb.append(String.format("\t[%d] %s", i, map.get(i).toString()));
         }
         return sb.toString();
@@ -332,30 +344,30 @@ public class ConsoleApp {
             io.write("What is the product Id?");
             productId = io.readNumber(3, 1, Integer.MAX_VALUE, false);
         }
-        io.write("Put the value 'NONE' to have it's previous parameter unchanged.");
-        io.write("What is the new value for description?");
+        io.write(Colour.CYAN,"Put the value 'NONE' to have it's previous parameter unchanged.");
+        io.write(ADMIN_PRODUCT_DESCRIPTION_REQUEST);
         var description = io.readString(3, false);
         Map<Integer, ProductCategory> categoryMap = mapCategory();
+        io.write(ADMIN_PRODUCT_CATEGORY_REQUEST);
         io.write(sortCategory(categoryMap));
-        io.write("Choose a number to for the category;");
         var category = io.readNumber(3, 1, mapCategory().size() + 1, false);
-        io.write("What is the value for price?");
-        io.write("Input 0.0 if unchanged?");
+        io.write(ADMIN_PRODUCT_PRICE_REQUEST);
+        io.write(Colour.CYAN, "Input 0.0 if unchanged?");
         var price = io.readString(5, false);
-        var entryPrice = price.equals("1.0") ? null : BigDecimal.valueOf(Long.parseLong(price));
+        var entryPrice = price.equals("0.0")  || price.equalsIgnoreCase("none")? null : BigDecimal.valueOf(Double.parseDouble(price));
         var request = ProductModificationRequest.builder()
                 .id(productId)
-                .description(description)
+                .description(description.equalsIgnoreCase("none") ? null : description)
                 .category(category ==  1 ? null : categoryMap.get(category))
                 .price(entryPrice)
                 .SKU("SKU")
                 .build();
         productService.modifyProduct(request);
-        io.writeSuccess("Product modified successfuly!");
+        io.writeSuccess(ADMIN_SUCCESSFUL_PRODUCT_CREATION_PROMPT);
     }
 
     /**
-     * This methods helps admin view a product by Id
+     * This method helps admin view a product by Id
      */
     private void adminViewProductById() {
         io.write("Please, input a valid product Id");
@@ -388,7 +400,7 @@ public class ConsoleApp {
             io.writeWarning("There seem to be no products currently, please try again later!");
             System.exit(0);
         }
-        io.write(DELIMETER_V);
+        io.write(DELIMETER_II);
         io.write(formatProducts(products.getProducts()));
         io.write(String.format("[CURRENT PAGE NO: %s] :: [TOTAL PAGES: %s] - [TOTAL PRODUCTS: %s]",
                 products.getCurrentPage(),
@@ -430,59 +442,68 @@ public class ConsoleApp {
         var pageSize = 20;
         var products = productService.getAll(null, null, pageNum, 20);
         if (products.getTotalItems() == 0){
-            io.writeWarning("There seem to be no products currenly, please add new products!");
+            io.writeWarning(ADMIN_NO_PRODUCT_ADD_PRODUCT_PROMPT);
             adminAddNewProductAction();
         }
         io.write(formatProducts(products.getProducts()));
+        io.write(Colour.CYAN, PRODUCT_META_INFO,
+                products.getCurrentPage(),
+                products.getTotalPages(),
+                products.getTotalItems()
+                );
         io.write(ADMIN_PRODUCT_OPTION);
-        var option = io.readNumber(3, 1, 6, false);
-        if (option == 6){
-            System.exit(0);
-        }
+        var option = io.readNumber(3, 1, 5, false);
+        var back = false;
         switch (option){
             case 1 -> {
                 if (pageNum - 1 < 1){
-                    io.writeWarning("Page size exceeded");
+                    io.writeWarning(PAGE_SIZE_EXCEEDED);
                     adminListAllProducts(noOfRemainingAttempts - 1, false, pageNum);
                 }
                 adminListAllProducts(3, false, pageNum - 1);
             }
             case 2 -> {
                 if (pageNum + 1> products.getTotalPages()){
-                    io.writeWarning("Page size exceeded");
+                    io.writeWarning(PAGE_SIZE_EXCEEDED);
                     adminListAllProducts(noOfRemainingAttempts, false, pageNum);
                 }
                 adminListAllProducts(3, false, pageNum + 1);
             }
             case 3 -> {
                 adminDeleteProductByIdAction(0);
-                adminListAllProducts(3, false, 1);
             }
             case 4 -> {
                 adminEditProductByIdAction(0);
-                adminListAllProducts(3, false, 0);
             }
+            case 5 -> back = true;
         }
-
+        if(back){
+            adminProductDashboardAction();
+        } else {
+            adminListAllProducts(3, false, 1);
+        }
     }
 
+    /**
+     * This method helps admin to create new products.
+     */
     private void adminAddNewProductAction() {
-        io.write("What is the new value for description?");
+        io.write(ADMIN_PRODUCT_DESCRIPTION_REQUEST);
         var description = io.readString(3, false);
         Map<Integer, ProductCategory> categoryMap = mapCategory();
         io.write(sortCategory(categoryMap));
-        io.write("Choose a number to for the category;");
+        io.write(ADMIN_PRODUCT_CATEGORY_REQUEST);
         var category = io.readNumber(4, 1, mapCategory().size() + 1, false);
-        io.write("What is the value for price?");
+        io.write(ADMIN_PRODUCT_PRICE_REQUEST);
         var price = io.readString(5, false);
         var request = ProductCreationRequest.builder()
                 .description(description)
                 .category(categoryMap.get(category))
-                .price(BigDecimal.valueOf(Long.parseLong(price)))
+                .price(BigDecimal.valueOf(Double.parseDouble(price)))
                 .SKU("SKU")
                 .build();
         productService.createProduct(request);
-        io.writeSuccess("Product created successfuly!");
+        io.writeSuccess(ADMIN_SUCCESSFUL_PRODUCT_CREATION_PROMPT);
     }
 
     /**
@@ -512,13 +533,13 @@ public class ConsoleApp {
      * @return a string witht eh products well formatted.
      */
     private String formatProducts(List<ProductDetailsResponse> products){
-        var format = "%d| %-5s | %-10s | %-20s | %-15s | %-10s%n";
-        var hFormat = "%s| %-5s | %-10s | %-20s | %-15s | %-10s%n";
+        var format = "%-4d| %-4s | %-14s | %-20s | %-10s | %-10s%n";
+        var hFormat = "%-4s| %-4s | %-14s | %-20s | %-10s | %-10s%n";
         var solution = new StringBuilder();
-        solution.append(DELIMETER_II+"\n");
+        solution.append(DELIMETER_I +"\n");
         solution.append("===PRODUCT LIST===\n");
-        solution.append(DELIMETER_II + "\n");
-        solution.append(String.format(hFormat, "NO", "Product ID", "SKU", "Description", "Category", "Price"));
+        solution.append(DELIMETER_I + "\n");
+        solution.append(String.format(hFormat, "NO", " ID", "SKU", "Description", "Category", "Price"));
         for(int i = 0; i < products.size(); i++) {
             var product = products.get(i);
             solution.append(String.format(format,
@@ -535,15 +556,15 @@ public class ConsoleApp {
     /**
      * This method formats the products list into a table.
      * @param customers This is a list of all products that should be contained in the table.
-     * @return a string witht eh products well formatted.
+     * @return a string with the products well formatted.
      */
     private String formatCustomer(List<CustomerDetailsResponse> customers){
         var format = "%d| %-5s | %-10s%n";
         var hFormat = "%s| %-5s | %-10s%n";
         var solution = new StringBuilder();
-        solution.append(DELIMETER_II+"\n");
+        solution.append(DELIMETER_I +"\n");
         solution.append("===PRODUCT LIST===\n");
-        solution.append(DELIMETER_II + "\n");
+        solution.append(DELIMETER_I + "\n");
         solution.append(String.format(hFormat, "NO", "Username"));
         for(int i = 0; i < customers.size(); i++) {
             var customer = customers.get(i);
@@ -556,15 +577,15 @@ public class ConsoleApp {
 
 
     /**
-     * This
+     * This helps format the products in a cart to the screen
      * @param products
      * @return
      */
     private String formatCartProducts(List<CartProductResponse> products){
-        var format = "%d| %-5s | %-10s | %-20s | %-15s | %-10s | %-20s | %-15s%n";
-        var hformat = "%s| %-5s | %-10s | %-20s | %-15s | %-10s | %-20s | %-15s%n";
+        var format = "%-4d| %-4s | %-10s | %-20s | %-15s | %-10s | %-20s | %-15s%n";
+        var hformat = "%-4s| %-4s | %-10s | %-20s | %-15s | %-10s | %-20s | %-15s%n";
         var solution = new StringBuilder();
-        solution.append(String.format(hformat, "NO", "Product ID", "SKU", "Description", "Category", "Unit Price", "Quantity", "Total Price"));
+        solution.append(String.format(hformat, "NO", "ID", "SKU", "Description", "Category", "Unit Price", "Quantity", "Total Price"));
         for(int i = 0; i < products.size(); i++) {
             var product = products.get(i);
             solution.append(String.format(format,
@@ -585,37 +606,29 @@ public class ConsoleApp {
         return solution.toString();
     }
 
-    /**
-     * This is prints a general welcome message to the screen
-     */
-    private void welcomeAction(){
-        io.write(Message.DELIMETER_I);
-        io.write(Message.WELCOME_MESSAGE);
-        io.write(Message.DELIMETER_I);
-    }
 
     /**
      * This is prints a customer welcome message to the screen
      */
     private void customerWelcomeAction(){
-        io.write(Message.DELIMETER_III);
+        io.write(Message.DELIMETER_I);
         io.write(CUSTOMER_DASHBOARD_MESSAGE, sessionData.getUsername());
-        io.write(Message.DELIMETER_III);
+        io.write(Message.DELIMETER_I);
     }
 
     /**
      * This is prints an admin welcome message to the screen
      */
     private void adminWelcomeAction(){
-        io.write(Message.DELIMETER_IV);
+        io.write(Message.DELIMETER_I);
         io.write(Message.ADMIN_DASHBOARD_MESSAGE, sessionData.getUsername());
-        io.write(Message.DELIMETER_IV);
+        io.write(Message.DELIMETER_I);
     }
 
     /**
      * This method helps to log a user(ADMIN/ CUSTOMER) in, as well as creation of account for customers.
-     * @param noOfRemainingAttempts This keeps tract of how many login attempts the user has. 
-     * @param promptRemainingAttempts This check if the user should be prompted how many login attempts remains.
+     * @param noOfRemainingAttempts keeps tract of how many login attempts the user has.
+     * @param promptRemainingAttempts check if the user should be prompted how many login attempts remains.
      */
     private void loginAction(int noOfRemainingAttempts, boolean promptRemainingAttempts){
         if (noOfRemainingAttempts == 0){
@@ -625,15 +638,19 @@ public class ConsoleApp {
         if (promptRemainingAttempts){
             io.write(Colour.RED, LOGIN_ATTEMPT_REMAINING_WARNING, noOfRemainingAttempts);
         }
+        io.write(Message.DELIMETER_I);
+        io.write(Message.WELCOME_MESSAGE);
+        io.write(Message.DELIMETER_I);
         io.write(LOGIN_PROMPT);
         io.write(LOGIN_OPTIONS);
-        io.write(PICK_AN_OPTION);
-        io.write(DELIMETER_V);
+        io.write(Colour.CYAN, PICK_AN_OPTION);
+        io.write(DELIMETER_II);
         var loginOption = io.readNumber(3, 1, 3, false);
         if (loginOption == 3){
             createCustomerAction(3, false);
             return;
         }
+        io.write(Colour.CYAN, LOGIN_IN_AS_SIGNIFIER, loginOption == 1 ? "Administrator" : "Customer");
         io.write(LOGIN_INPUT_USERNAME_PROMPT);
         var username = io.readString(3, false);
         io.write(LOGIN_INPUT_PASSWORD_PROMPT);
@@ -672,9 +689,9 @@ public class ConsoleApp {
             io.write(Colour.RED, CUSTOMER_ACCOUNT_CREATION_ATTEMPT_EXHAUSTION);
             System.exit(0);
         }
-        io.write(DELIMETER_II);
+        io.write(DELIMETER_I);
         io.write(ACCOUNT_CREATION_MESSAGE);
-        io.write(DELIMETER_II);
+        io.write(DELIMETER_I);
         if (promptRemainingAttempts){
             io.write(Colour.RED, CUSTOMER_ACCOUNT_CREATION_ATTEMPT_REMAINING_WARNING, noOfRemainingAttempts);
         }
@@ -688,11 +705,11 @@ public class ConsoleApp {
                         .build());
         if (response > 0){
             io.writeSuccess(ACCOUNT_CREATION_SUCCESSFUL);
-            io.write(Colour.CYAN, DELIMETER_V);
+            io.write(Colour.CYAN, DELIMETER_II);
             loginAction(3, false);
             return;
         }
-        io.writeWarning("Account creation not successful, please try again later!");
+        io.writeWarning(ACCOUNT_CREATION_FAILURE);
         createCustomerAction(noOfRemainingAttempts- 1, true);
     }
 

@@ -6,6 +6,7 @@ import com.damzxyno.foodstore.enums.UserType;
 import com.damzxyno.foodstore.repository.AdminRepository;
 import com.damzxyno.foodstore.repository.CustomerRepository;
 import com.damzxyno.foodstore.service.interfaces.IdentityService;
+import com.damzxyno.foodstore.utilities.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,13 @@ import org.springframework.stereotype.Service;
 public class IdentityServiceImpl implements IdentityService {
     private final CustomerRepository custRepo;
     private final AdminRepository adminRepo;
+    private final PasswordEncoder encoder;
 
+    /**
+     * This method helps user's login. It passes the request to the necessary method to authenticate users.
+     * @param request contains the user's password and username
+     * @return a login response containing info if the login attempt was successful or not.
+     */
     @Override
     public LoginResponse Login(LoginRequest request) {
         if (request.getUserType().equals(UserType.ADMIN)){
@@ -28,8 +35,8 @@ public class IdentityServiceImpl implements IdentityService {
     }
 
     /**
-     * This endpoint help log in a customer
-     * @param request The request param containing customer's login credentials.
+     * This method help log in a customer
+     * @param request contains the customer's login credentials.
      * @return This is a login response to maintain a session or inform user of wrong login credentials.
      */
     private LoginResponse LoginCustomer(LoginRequest request) {
@@ -40,7 +47,7 @@ public class IdentityServiceImpl implements IdentityService {
                     .message("User not found!")
                     .build();
         }
-        if (!user.get().getPassword().equals(request.getPassword())){
+        if (!encoder.equal(user.get().getPassword(), request.getPassword())){
             return LoginResponse.builder()
                     .isSuccess(false)
                     .message("Incorrect password!")
@@ -69,7 +76,7 @@ public class IdentityServiceImpl implements IdentityService {
                     .message("User not found!")
                     .build();
         }
-        if (!user.get().getPassword().equals(request.getPassword())){
+        if (!encoder.equal(user.get().getPassword(), request.getPassword())){
             return LoginResponse.builder()
                     .isSuccess(false)
                     .message("Incorrect password!")

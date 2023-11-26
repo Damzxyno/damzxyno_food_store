@@ -1,4 +1,4 @@
-package com.damzxyno.foodstore;
+package com.damzxyno.foodstore.utilities;
 
 import com.damzxyno.foodstore.entity.Admin;
 import com.damzxyno.foodstore.entity.Product;
@@ -18,6 +18,7 @@ import java.util.List;
 public class Seeder implements CommandLineRunner {
     private final AdminRepository adminRepo;
     private final ProductRepository productRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run (String [] args) throws Exception{
@@ -27,12 +28,12 @@ public class Seeder implements CommandLineRunner {
     private void seedAdmin(){
         var admin = Admin.builder()
                 .username("admin")
-                .password("password")
+                .password(passwordEncoder.hashPassword("password"))
                 .build();
         adminRepo.save(admin);
     }
     private void seedProducts(){
-        var products = new ArrayList<Product>(
+        var products = new ArrayList<>(
                 List.of(Product.builder()
                                 .category(ProductCategory.FRUIT)
                                 .description("British Apples")
