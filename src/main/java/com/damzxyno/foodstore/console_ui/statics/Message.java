@@ -12,7 +12,7 @@ public final class Message {
     public static final String LOGIN_PROMPT = "Choose a login option!";
     public static final String LOGIN_IN_AS_SIGNIFIER = "Logging you in as %s.";
     public static final String ACCOUNT_CREATION_FAILURE = "Account creation not successful, please try again later!";
-    public static final String LOGIN_OPTIONS = "[1] Login as an ADMIN \n[2] Login as a Cusomer \n[3] Create account as a Customer \n[0] Exit";
+    public static final String LOGIN_OPTIONS = "[1] login as an ADMIN \n[2] login as a Cusomer \n[3] Create account as a Customer \n[0] Exit";
     public static final String PICK_AN_OPTION = "\u001B[3mPlease, pick an option.\u001B[0m";
     public static final String CUSTOMER_DASHBOARD_OPTIONS = "[1] List all products \n[2] Search for product by ID \n[3] Search for product by keyword \n[4] View cart \n[0] Exit";
     public static final String CUSTOMER_PRODUCT_OPTION = "[1] Previous Page \t [2] Next Page \t [3] Add to cart \t[4] View Cart/ Checkout \t[5] Back \t[0] Exit";

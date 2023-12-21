@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     public Optional<ProductDetailsResponse> getProductById(Long id){
         var product = prodRepo.findById(id);
         if (product.isPresent()){
-            var res = mapper.map(product, ProductDetailsResponse.class);
+            var res = mapper.map(product.get(), ProductDetailsResponse.class);
             return Optional.ofNullable(res);
         }
         return Optional.empty();

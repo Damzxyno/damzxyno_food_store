@@ -5,6 +5,9 @@
     <title>Product Management</title>
 </head>
 <body>
+<!--<div th:unless="${#authentication.principal != null}">-->
+<!--    <a href="/login">login</a>-->
+<!--</div>-->
 <header th:insert="fragments/base.html :: header"> </header>
 <header th:insert="fragments/base.html :: product_search"> </header>
 

@@ -22,7 +22,6 @@ public class CustomerServiceImpl implements CustomerService {
     private final AddressRepository addressRepository;
     private final ModelMapper mapper;
 
-
     @Override
     public Long createCustomer(CustomerCreationRequest request) {
         var customer = Customer.builder()
@@ -46,10 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Optional<CustomerDetailsResponse> getCustomerById(Long id){
         var customer = custRepo.findById(id);
-        if (customer.isPresent()){
-            return Optional.ofNullable(mapper.map(customer, CustomerDetailsResponse.class));
-        }
-        return Optional.empty();
+        return customer.map(value -> mapper.map(value, CustomerDetailsResponse.class));
     }
 
     @Override

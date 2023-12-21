@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Success</title>
+</head>
+<body>
+<script th:inline="javascript">
+
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // Function to set a cookie
+    function setCookie(name, value, days) {
+        var expires = '';
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = '; expires=' + date.toUTCString();
+        }
+        document.cookie = name + '=' + value + expires + '; path=/';
+    }
+
+    // Get the LoginResponse object from Thymeleaf model
+    var loginResponse = /*[[${loginResponse}]]*/ null;
+
+    if (loginResponse) {
+        // Save properties to cookies
+        setCookie('message', loginResponse.message, 1);
+        setCookie('isSuccess', loginResponse.isSuccess.toString(), 1);
+        setCookie('username', loginResponse.username, 1);
+        setCookie('id', loginResponse.id.toString(), 1);
+        setCookie('userType', loginResponse.userType.toString(), 1);
+
+        // Redirect to a controller or page after saving cookies
+        window.location.href = '/products';
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>

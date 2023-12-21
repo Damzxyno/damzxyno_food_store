@@ -5,7 +5,6 @@ import com.damzxyno.foodstore.dto.request.identity.LoginRequest;
 import com.damzxyno.foodstore.enums.UserType;
 import com.damzxyno.foodstore.service.interfaces.CustomerService;
 import com.damzxyno.foodstore.service.interfaces.IdentityService;
-import com.damzxyno.foodstore.service.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,12 +35,13 @@ public class IdentityController {
     }
 
     @PostMapping("/customer-login")
-    public String login(@ModelAttribute LoginRequest request){
+    public String login(@ModelAttribute LoginRequest request, Model model){
         request.setUserType(UserType.CUSTOMER);
-        var res = identityService.Login(request);
+        var res = identityService.login(request);
         if (!res.isSuccess()){
             return "redirect:customer-login";
         }
-        return "products";
+        model.addAttribute("user", res);
+        return "login-success";
     }
 }

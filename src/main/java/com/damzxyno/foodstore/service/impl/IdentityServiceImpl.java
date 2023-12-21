@@ -6,8 +6,8 @@ import com.damzxyno.foodstore.enums.UserType;
 import com.damzxyno.foodstore.repository.AdminRepository;
 import com.damzxyno.foodstore.repository.CustomerRepository;
 import com.damzxyno.foodstore.service.interfaces.IdentityService;
-import com.damzxyno.foodstore.utilities.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,7 +26,7 @@ public class IdentityServiceImpl implements IdentityService {
      * @return a login response containing info if the login attempt was successful or not.
      */
     @Override
-    public LoginResponse Login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         if (request.getUserType().equals(UserType.ADMIN)){
            return LoginAdmin(request);
         } else {
@@ -47,7 +47,7 @@ public class IdentityServiceImpl implements IdentityService {
                     .message("User not found!")
                     .build();
         }
-        if (!encoder.equal(user.get().getPassword(), request.getPassword())){
+        if (!encoder.matches(request.getPassword(), user.get().getPassword())){
             return LoginResponse.builder()
                     .isSuccess(false)
                     .message("Incorrect password!")
@@ -76,7 +76,7 @@ public class IdentityServiceImpl implements IdentityService {
                     .message("User not found!")
                     .build();
         }
-        if (!encoder.equal(user.get().getPassword(), request.getPassword())){
+        if (!encoder.matches(request.getPassword(), user.get().getPassword())){
             return LoginResponse.builder()
                     .isSuccess(false)
                     .message("Incorrect password!")

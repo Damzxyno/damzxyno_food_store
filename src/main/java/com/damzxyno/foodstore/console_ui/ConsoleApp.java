@@ -659,7 +659,7 @@ public class ConsoleApp {
             case 1 -> UserType.ADMIN;
             default -> UserType.CUSTOMER;
         };
-        var loginResponse = identityService.Login(
+        var loginResponse = identityService.login(
                 LoginRequest.builder()
                         .username(username)
                         .password(password)
