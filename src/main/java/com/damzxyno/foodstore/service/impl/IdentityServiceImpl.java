@@ -6,8 +6,8 @@ import com.damzxyno.foodstore.enums.UserType;
 import com.damzxyno.foodstore.repository.AdminRepository;
 import com.damzxyno.foodstore.repository.CustomerRepository;
 import com.damzxyno.foodstore.service.interfaces.IdentityService;
+import com.damzxyno.foodstore.utilities.PasswordHashingUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class IdentityServiceImpl implements IdentityService {
     private final CustomerRepository custRepo;
     private final AdminRepository adminRepo;
-    private final PasswordEncoder encoder;
+    private final PasswordHashingUtil encoder;
 
     /**
      * This method helps user's login. It passes the request to the necessary method to authenticate users.

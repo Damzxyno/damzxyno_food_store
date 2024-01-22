@@ -9,7 +9,10 @@ import lombok.Setter;
 
 import java.util.List;
 
-
+/**
+ * Paginated product response
+ *
+ */
 @Getter
 @Setter
 public class PaginatedProductsResponse extends  PaginatedResponse{

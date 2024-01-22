@@ -1,25 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Customer Login</title>
-</head>
-<body>
-<form th:action="@{'/identity/customer-login'}" method="post">
+<head th:insert="fragments/base.html :: html_header"> </head>
+<body class="">
+<!--content-->
+<div class="flex w-full h-screen">
+    <!-- form -->
+    <div class="py-5 flex w-full flex-1 md:items-center justify-center">
+        <div class="w-full px-2 pb-4 max-w-sm">
+            <div class="flex justify-center mt-24 md:mt-0">
+                <img th:src="@{/images/vite.svg}" class="logo" alt="logo" />
+            </div>
+            <p th:if="${message != null}" style="color: orange" th:text="${message}"></p>
+            <h5 class="font-semibold text-center text-2xl mt-5 mb-12">Welcome Back [Customer Login]</h5>
 
-  <label for="username">Username:</label>
-  <input type="text" id="username" name="username" required/>
+            <form th:action="@{'/identity/customer-login'}" method="post" class="w-full">
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm text-gray-500 font-semibold">Username:</label>
+                        <div class=" border border-gray-200">
+                            <input class="rounded-none w-full px-2 py-2" type="text" id="username" name="username" required placeholder="enter username" />
+                        </div>
+                    </div>
 
-  <br/>
+                    <div>
+                        <label class="text-sm text-gray-500 font-semibold">Password</label>
+                        <div class=" border border-gray-200">
+                            <input type="password" class="rounded-none w-full px-2 py-2" id="password" name="password" required placeholder="enter password" />
+                        </div>
+                    </div>
+                </div>
 
-  <label for="password">Password:</label>
-  <input type="password" id="password" name="password" required/>
+                <div class="flex mt-4 mb-5">
+                    <div>
+                        <input type="checkbox" id="remember_me" class="rounded-none">
+                        <label for="remember_me" class="text-sm text-gray-700">Keep me logged In</label>
+                    </div>
+                </div>
 
-  <br/>
+                <div>
+                    <button type="submit" class="block px-8 py-2 text-center w-full bg-violet-500 dark:bg-violet-800 text-white">Log In</button>
+                </div>
+            </form>
 
-  <button type="submit">Login</button>
+            <div class="relative text-center my-5 after:content-[''] after:absolute after:bg-gray-300 after:top-[calc(50%_-_0.5px)] after:left-0 after:w-full after:h-[1px]">
+                <span class="relative z-10 px-2 bg-white">Or</span>
+            </div>
 
-</form>
+            <div class="text-center text-sm">
+                <span>Don't have an account?</span>
+                <a th:href="@{/identity/create-account}" class="font-semibold text-violet-500">Sign up</a>
+            </div>
+        </div>
+    </div>
 
+    <!-- banner -->
+    <div class="hidden relative  md:flex w-1/3 pt-20 px-10 bg-gradient-to-t from-violet-200 to-violet-800">
+        <div class="max-w-xs space-y-2">
+            <span class="text-gray-100">Damzxyno's store</span>
+            <h2 class="text-gray-300 text-5xl font-light">Discover the world's best shopping mall and goods!</h2>
+        </div>
+        <img src="/images/vecteezy_online-shopping-concept-design-or-3d-online-shopping-or_10915954.png" class="absolute -bottom-[10px] -right-[20px] min-w-[40em]" alt="banner" />
+    </div>
+</div>
 </body>
 </html>

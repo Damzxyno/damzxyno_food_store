@@ -27,6 +27,10 @@ import java.util.List;
 import java.util.Map;
 import static com.damzxyno.foodstore.console_ui.statics.Message.*;
 
+/**
+ * This class runs the console app
+ */
+
 @Component
 @RequiredArgsConstructor
 public class ConsoleApp {
@@ -59,6 +63,7 @@ public class ConsoleApp {
      * This is the entrypoint into the customer dashboard and operations
      */
     private void customerOptionsAction() {
+        var back = false;
         io.write("\n");
         customerWelcomeAction();
         io.write(CUSTOMER_DASHBOARD_OPTIONS);
@@ -82,6 +87,12 @@ public class ConsoleApp {
                 viewCustomerCartAction(1, false, 1);
                 customerOptionsAction();
             }
+            case 5 -> back = true;
+        }
+        if (back){
+            return;
+        } else {
+            customerOptionsAction();
         }
     }
 
@@ -253,6 +264,9 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * This method presents the admin's dashboard
+     */
     private void adminCustomerManagementDashboard() {
         io.write(Message.DELIMETER_I);
         io.write(ADMIN_CUSTOMER_MANAGEMENT_DASHBOARD_MESSAGE, sessionData.getUsername());
@@ -268,10 +282,14 @@ public class ConsoleApp {
         if (back){
             adminOptionsAction();
         } else {
-            adminProductDashboardAction();
+            adminCustomerManagementDashboard();
         }
     }
 
+
+    /**
+     * This method help admin view customer details by id
+     */
     private void adminViewCustomerByIdAction() {
         io.write("Input customer's Id");
         var input = io.readNumber(3, 1, Integer.MAX_VALUE, false);
@@ -284,12 +302,18 @@ public class ConsoleApp {
         io.write(formatCustomer);
     }
 
+    /**
+     * This method helps admin to view all customers
+     */
     private void adminViewAllCustomerAction() {
         var customers = customerService.getAll();
         var formatCustomer = formatCustomer(customers);
         io.write(formatCustomer);
     }
 
+    /**
+     * This method helps admin to view all products
+     */
     private void adminProductDashboardAction() {
         io.write(Message.DELIMETER_I);
         io.write(ADMIN_PRODUCT_MANAGEMENT_DASHBOARD_MESSAGE, sessionData.getUsername());
@@ -312,6 +336,10 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * This method helps admin delete products
+     * @param productId
+     */
     private void adminDeleteProductByIdAction(long productId) {
         io.write(Colour.CYAN,DELETE_PRODUCT_PROMPT);
         if (productId == 0){
@@ -322,6 +350,11 @@ public class ConsoleApp {
         io.writeSuccess("Product deleted successfully!");
     }
 
+    /**
+     * This method helps to map numbers to product category for easy processing
+     * @return a map linking numbers to specific product category
+     */
+
     private HashMap<Integer, ProductCategory> mapCategory(){
         var result = new HashMap<Integer, ProductCategory>();
         var index = 2;
@@ -331,6 +364,12 @@ public class ConsoleApp {
         }
         return result;
     }
+
+    /**
+     * This method return a string to display numbers and their mapped product category
+     * @param map
+     * @return
+     */
     private String sortCategory(Map<Integer, ProductCategory> map){
         var sb = new StringBuilder();
         sb.append("[1] None/ Remain unchanged");
@@ -394,7 +433,8 @@ public class ConsoleApp {
      * @param promptRemainingAttempts
      */
     private void customerListAllProductsAction(int noOfRemainingAttempts, boolean promptRemainingAttempts, int pageNum){
-        var pageSize = 20;
+        var back = false;
+        var pageSize = 8;
         var products = productService.getAll(null, null, pageNum, 20);
         if (products.getTotalItems() == 0){
             io.writeWarning("There seem to be no products currently, please try again later!");
@@ -430,6 +470,12 @@ public class ConsoleApp {
                 customerListAllProductsAction(3, false, pageNum);
             }
             case 4 -> viewCustomerCartAction(3, false, 1);
+            case 5 -> back = true;
+        }
+        if(back){
+            return;
+        } else {
+            customerListAllProductsAction(noOfRemainingAttempts, promptRemainingAttempts, pageNum);
         }
     }
 
@@ -439,8 +485,8 @@ public class ConsoleApp {
      * @param promptRemainingAttempts
      */
     private void adminListAllProducts(int noOfRemainingAttempts, boolean promptRemainingAttempts, int pageNum){
-        var pageSize = 20;
-        var products = productService.getAll(null, null, pageNum, 20);
+        var pageSize = 6;
+        var products = productService.getAll(null, null, pageNum, pageSize);
         if (products.getTotalItems() == 0){
             io.writeWarning(ADMIN_NO_PRODUCT_ADD_PRODUCT_PROMPT);
             adminAddNewProductAction();
@@ -533,17 +579,16 @@ public class ConsoleApp {
      * @return a string witht eh products well formatted.
      */
     private String formatProducts(List<ProductDetailsResponse> products){
-        var format = "%-4d| %-4s | %-14s | %-20s | %-10s | %-10s%n";
-        var hFormat = "%-4s| %-4s | %-14s | %-20s | %-10s | %-10s%n";
+        var format = "%-4s | %-14s | %-20s | %-10s | %-10s%n";
+        var hFormat = "%-4s | %-14s | %-20s | %-10s | %-10s%n";
         var solution = new StringBuilder();
         solution.append(DELIMETER_I +"\n");
         solution.append("===PRODUCT LIST===\n");
         solution.append(DELIMETER_I + "\n");
-        solution.append(String.format(hFormat, "NO", " ID", "SKU", "Description", "Category", "Price"));
+        solution.append(String.format(hFormat, "ID", "SKU", "Description", "Category", "Price"));
         for(int i = 0; i < products.size(); i++) {
             var product = products.get(i);
             solution.append(String.format(format,
-                    i + 1,
                     product.getId(),
                     product.getSKU(),
                     product.getDescription(),
@@ -559,8 +604,8 @@ public class ConsoleApp {
      * @return a string with the products well formatted.
      */
     private String formatCustomer(List<CustomerDetailsResponse> customers){
-        var format = "%d| %-5s | %-10s%n";
-        var hFormat = "%s| %-5s | %-10s%n";
+        var format = "%d| %-5s\n";
+        var hFormat = "%s| %-5s\n";
         var solution = new StringBuilder();
         solution.append(DELIMETER_I +"\n");
         solution.append("===PRODUCT LIST===\n");

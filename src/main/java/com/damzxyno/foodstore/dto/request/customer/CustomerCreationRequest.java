@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO for creating customers
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

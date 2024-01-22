@@ -19,4 +19,5 @@ public interface ProductService {
 
     PaginatedProductsResponse getAll(String search, List<ProductCategory> category, int pageNo, int pageSize);
 
+    PaginatedProductsResponse getExpired();
 }

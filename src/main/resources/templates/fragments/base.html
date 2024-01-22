@@ -1,11 +1,48 @@
-<div th:fragment="header">
-  <h1>Welcome to Damzxyno's Food store</h1>
-  <nav>
-    <a th:href="'/products'">Product</a>
-    <a th:href="'/customers'">Customers</a>
+<head th:fragment="html_header">
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/vite.svg}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+  <link rel="stylesheet" th:href="@{/styles/style.css}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<header class="flex items-center justify-between" th:fragment="header">
+  <div class="flex items-center space-x-2">
+    <img src="/images/vite.svg" class="logo" alt="logo" />
+    <h5 class="text-lg font-semibold">Damzxyno's Food Store</h5>
+  </div>
+  <nav class="font-extralight text-gray-300">
+    <ul class="flex font-normal text-black gap-3">
+      <li>
+        <a th:href="@{/products}">Products</a>
+      </li>
+      <li th:if="${isAdmin}">
+        <a th:href="@{/customers}">Customers</a>
+      </li>
+      <li th:if="${isAdmin}">
+        <a th:href="@{/products/create}">Create New Product</a>
+      </li>
+      <li th:if="${userId != null}">
+        <button onclick="logout()">Logout</button>
+      </li>
+      <li class="ml-3" th:unless="${isAdmin}">
+        <a th:href="@{'/cart/' + ${userId} + '/1'}" class="block flex items-center rounded-xl overflow-hidden bg-gray-300">
+          <span class="px-2">Cart</span>
+          <div class="text-xs text-gray-100 bg-gray-700 px-1.5 py-1 rounded-full">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+        </a>
+      </li>
+    </ul>
   </nav>
-</div>
-
+  <script th:inline="javascript">
+    function logout() {
+      document.cookie = "details" + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.href = "/products";
+    }
+  </script>
+</header>
 <div th:fragment="product_search">
   <form th:action="@{'/products'}" method="GET">
     <label for="searchQuery">Search:</label>

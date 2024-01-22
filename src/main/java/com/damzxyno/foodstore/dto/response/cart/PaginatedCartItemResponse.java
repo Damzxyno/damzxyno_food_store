@@ -6,6 +6,10 @@ import lombok.*;
 
 import java.util.List;
 
+
+/**
+ * Paginated Response With List of Cart response
+ */
 @Getter
 @Setter
 public class PaginatedCartItemResponse extends PaginatedResponse {

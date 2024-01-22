@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -22,5 +23,7 @@ public class Product {
     private String description;
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
+    private LocalDate expiryDate;
     private BigDecimal price;
+    private String imageUrl;
 }

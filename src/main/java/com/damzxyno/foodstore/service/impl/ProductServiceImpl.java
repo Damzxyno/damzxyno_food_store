@@ -14,15 +14,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This helps with all product related implementations
+ */
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository prodRepo;
     private final ModelMapper mapper;
+
+    /**
+     * Helps to create a product
+     * @param request product creation request
+     * @return a Long, ID of the newly created product
+     */
 
     @Override
     public Long createProduct (ProductCreationRequest request) {
@@ -31,10 +41,17 @@ public class ProductServiceImpl implements ProductService {
                 .category(request.getCategory())
                 .SKU(request.getSKU())
                 .description(request.getDescription())
+                .expiryDate(request.getExpiryDate())
                 .build();
         var res = prodRepo.save(product);
         return res.getId();
     }
+
+    /**
+     * Retrieves a product detail by ID
+     * @param id if the product required
+     * @return a product
+     */
 
     @Override
     public Optional<ProductDetailsResponse> getProductById(Long id){
@@ -46,6 +63,11 @@ public class ProductServiceImpl implements ProductService {
         return Optional.empty();
     }
 
+    /**
+     * Helps to modify a product
+     * @param request product modification request
+     * @return boolean to signify successful modification
+     */
     @Override
     public boolean modifyProduct(ProductModificationRequest request) {
         var productOpt = prodRepo.findById(request.getId());
@@ -57,9 +79,16 @@ public class ProductServiceImpl implements ProductService {
         product.setSKU(request.getSKU());
         product.setCategory(request.getCategory());
         product.setDescription(request.getDescription());
+        product.setExpiryDate(request.getExpiryDate());
         prodRepo.save(product);
         return true;
     }
+
+    /**
+     * Deletes product by ID
+     * @param id of the product to be deleted
+     * @return boolean to signify successful deletion
+     */
 
     @Override
     public boolean deleteProductById(long id) {
@@ -67,6 +96,14 @@ public class ProductServiceImpl implements ProductService {
         return true;
     }
 
+    /**
+     * Retrieves a paginated product response
+     * @param search parameter to filter product by
+     * @param category of product required
+     * @param pageNo of paginated products
+     * @param pageSize of paginated products
+     * @return a paginated products list
+     */
     @Override
     public PaginatedProductsResponse getAll(String search, List<ProductCategory> category, int pageNo, int pageSize) {
         if (pageNo < 0){
@@ -87,6 +124,22 @@ public class ProductServiceImpl implements ProductService {
             products = prodRepo.findAll(pageable);
         }
 
+        var productsDetail = products.stream()
+                .map(product -> mapper.map(product, ProductDetailsResponse.class))
+                .toList();
+        return PaginatedProductsResponse.builder()
+                .products(productsDetail)
+                .currentItems(products.getNumberOfElements())
+                .currentPage(products.getNumber() + 1)
+                .totalItems(products.getTotalElements())
+                .totalPages(products.getTotalPages())
+                .build();
+    }
+
+    @Override
+    public PaginatedProductsResponse getExpired() {
+        var pageable = PageRequest.of(0, 10);
+        Page<Product> products = prodRepo.getExpired(LocalDate.now(), pageable);
         var productsDetail = products.stream()
                 .map(product -> mapper.map(product, ProductDetailsResponse.class))
                 .toList();

@@ -1,12 +1,14 @@
 package com.damzxyno.foodstore.dto.response.identity;
 
 import com.damzxyno.foodstore.enums.UserType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+/**
+ * Login response DTO
+ */
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

@@ -9,7 +9,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
+/**
+ * DTO for product details response
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +22,8 @@ public class ProductDetailsResponse {
     private Long id;
     private String SKU;
     private String description;
+    private String imageUrl;
     private ProductCategory category;
     private BigDecimal price;
+    private LocalDate expiryDate;
 }

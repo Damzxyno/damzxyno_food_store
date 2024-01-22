@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * This class hold the logged in user info for a console app
+ */
 @Getter
 @Builder
 @NoArgsConstructor

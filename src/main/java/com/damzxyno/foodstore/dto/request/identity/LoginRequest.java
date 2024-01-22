@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * DTO containing login reuest
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,4 +1,8 @@
 package com.damzxyno.foodstore.console_ui.enums;
+
+/**
+ * This class contains all colour used in the console app
+ */
 public enum Colour {
     RESET("\u001B[0m"),
     RED("\u001B[31m"),

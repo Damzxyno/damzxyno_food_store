@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="fragments/base.html :: html_header"> </head>
+<body class="bg-gray-100">
+<header th:insert="fragments/base.html :: header"> </header>
+<div class="p-5 max-w-7xl mx-auto">
+    <div class="grid grid-cols-12 gap-6 mt-8">
+    <div class="col-span-12 md:col-span-8">
+        <h1 class="font-thin text-2xl md:text-4xl mb-2">Cart</h1>
+
+        <div class="divide-y" th:each="product : ${cart.products}">
+            <div class="py-4 flex justify-between">
+                <div class="w-[150px] h-[100px] bg-gray-200">
+                    <img th:if="${product.imageUrl != null}" th:src = "${'/images/' + product.getImageUrl()}" th:alt="${'An image of a ' + product.getDescription()}" class="w-full h-full object-cover"/>
+                </div>
+
+                <div class="flex flex-col md:flex-row md:gap-12 md:items-center justify-between">
+                    <div>
+                        <h5 class="font-semibold -mb-1" th:text="${product.description}">Title of product</h5>
+                        <span class="text-sm text-gray-600" th:text="${product.category}"></span>
+                    </div>
+
+                    <div class="flex border rounded-xl overflow-hidden items-center h-fit w-fit">
+                        <button class="pl-3 pr-1">-</button>
+                        <span th:text="${product.quantity}" class="w-[25px]"></span>
+                        <button class="pl-1 pr-3">+</button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center justify-between md:gap-12">
+                    <div class="font-semibold" th:text="@{'&pound;' + ${product.price}}"></div>
+
+                    <button class="px-2">
+                        <i class="fa fa-trash">
+                            <a href="delete" ></a>
+                        </i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col col-span-12 md:col-span-4 bg-violet-500 rounded text-white px-3 py-3 md:min-h-[calc(100vh_-_200px)]">
+        <div class="flex-1">
+            <h2 class="font-semibold text-lg mb-8">Summary</h2>
+
+            <ul class="space-y-2 pb-2">
+                <li class="flex justify-between">
+                    <span class="text-sm text-gray-200">items</span>
+                    <span class="text-gray-200 font-semibold" th:text="@{'&pound;' + ${itemPrice}}"></span>
+                </li>
+                <li class="flex justify-between">
+                    <span class="text-sm text-gray-200">subtotal</span>
+                    <span class="text-gray-200 font-semibold" th:text="@{'&pound;' + ${subtotalPrice}}"></span>
+                </li>
+                <li class="flex justify-between">
+                    <span class="text-sm text-gray-200">shipping</span>
+                    <span class="text-gray-200 font-semibold">10</span>
+                </li>
+            </ul>
+
+            <hr />
+
+            <div class="flex justify-between mt-2">
+                <span class="text-sm text-gray-200">total:</span>
+                <span class="text-lg font-bold" th:text="@{'&pound;' + ${totalPrice}}"></span>
+            </div>
+        </div>
+
+        <div class="mt-4 mb-2 space-y-4 items-end justify-end">
+            <p class="text-xs text-gray-300">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+            <div class="mt-auto">
+
+                    <a th:href="@{'/cart/clear/' + ${userId}}">
+                        <button class="border border-white px-8 py-2 w-full">
+                        CHECK OUT
+                        </button>
+
+                    </a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
+</body>
+</html>

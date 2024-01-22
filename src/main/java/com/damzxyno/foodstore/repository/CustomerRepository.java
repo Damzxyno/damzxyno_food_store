@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * This class helps to interact with the customer table on the database
+ */
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findCustomerByUsername(String username);

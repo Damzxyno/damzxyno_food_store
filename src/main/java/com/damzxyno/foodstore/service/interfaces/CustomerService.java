@@ -13,4 +13,6 @@ public interface CustomerService {
     boolean modifyCustomer(CustomerModificationRequest request);
 
     List<CustomerDetailsResponse> getAll();
+
+    void deleteCustomerByID(long customerId);
 }

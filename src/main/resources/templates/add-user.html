@@ -1,41 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Account Creation</title>
-</head>
-<body>
-<h2>Customer Account Creation</h2>
-<form th:action="@{/identity/create-account}" th:object="${customerCreationRequest}" method="post">
+<head th:insert="fragments/base.html :: html_header"> </head>
+<body class="bg-gray-100">
+<div class="p-5 max-w-7xl mx-auto">
+    <header th:insert="fragments/base.html :: header"> </header>
+    <div class="mt-8">
+        <h5 class="font-semibold text-center text-2xl mt-5 mb-8">Customer Account Creation</h5>
 
-    <label for="username">Username:</label>
-    <input type="text" id="username" th:field="*{username}" required/>
+        <form th:action="@{/identity/create-account}" th:object="${customerCreationRequest}" method="post" class="w-full">
+            <div class="space-y-5">
+                <div>
+                    <label class="text-sm text-gray-500 font-semibold">Username:</label>
+                    <div class="border border-gray-200">
+                        <input type="text" class="rounded-none w-full px-2 py-2" id="username" th:field="*{username}" required placeholder="username" />
+                    </div>
+                </div>
 
-    <br/>
+                <div>
+                    <label class="text-sm text-gray-500 font-semibold">Password</label>
+                    <div class=" border border-gray-200">
+                        <input type="password" class="rounded-none w-full px-2 py-2" id="password" th:field="*{password}" required placeholder="enter password" />
+                    </div>
+                </div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" th:field="*{password}" required/>
+                <div>
+                    <label class="text-sm text-gray-500 font-semibold">Address Line 1:</label>
+                    <div class="border border-gray-200">
+                        <input type="text" class="rounded-none w-full px-2 py-2" id="addressLine1" th:field="*{address.line1}" required placeholder="2 Japex Street" />
+                    </div>
+                </div>
 
-    <br/>
+                <div>
+                    <label class="text-sm text-gray-500 font-semibold">Address Line 2:</label>
+                    <div class="border border-gray-200">
+                        <input type="text" class="rounded-none w-full px-2 py-2" id="addressLine2" th:field="*{address.line2}" placeholder="Manchester" />
+                    </div>
+                </div>
 
-    <label for="addressLine1">Address Line 1:</label>
-    <input type="text" id="addressLine1" th:field="*{address.line1}" required/>
+                <div>
+                    <label class="text-sm text-gray-500 font-semibold">Address Line 3:</label>
+                    <div class="border border-gray-200">
+                        <input type="text" class="rounded-none w-full px-2 py-2" id="addressLine3" th:field="*{address.line3}" placeholder="M30 2AB" />
+                    </div>
+                </div>
+            </div>
 
-    <br/>
 
-    <label for="addressLine2">Address Line 2:</label>
-    <input type="text" id="addressLine2" th:field="*{address.line2}"/>
+            <div class="mt-5">
+                <button type="submit" class="block px-8 py-2 text-center w-full bg-violet-800 text-white">Sign Up</button>
+            </div>
+        </form>
 
-    <br/>
 
-    <label for="addressLine3">Address Line 3:</label>
-    <input type="text" id="addressLine3" th:field="*{address.line3}"/>
-
-    <br/>
-
-    <button type="submit">Create Account</button>
-
-</form>
-
+        <div class="text-center text-sm mt-5">
+            <span>Already have an account?</span>
+            <a th:href="@{/identity/customer-login}" class="font-semibold text-violet-500">Log In</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

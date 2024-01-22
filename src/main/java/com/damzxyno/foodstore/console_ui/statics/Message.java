@@ -1,5 +1,9 @@
 package com.damzxyno.foodstore.console_ui.statics;
 
+
+/**
+ * This class contains all the message templates for the console ui
+ */
 public final class Message {
     public static final String WELCOME_MESSAGE = "WELCOME TO DAMZXYNO FOOD STORE!";
     public static final String ACCOUNT_CREATION_MESSAGE = "WELCOME TO CUSTOMER ACCOUNT CREATION!";
@@ -14,7 +18,7 @@ public final class Message {
     public static final String ACCOUNT_CREATION_FAILURE = "Account creation not successful, please try again later!";
     public static final String LOGIN_OPTIONS = "[1] login as an ADMIN \n[2] login as a Cusomer \n[3] Create account as a Customer \n[0] Exit";
     public static final String PICK_AN_OPTION = "\u001B[3mPlease, pick an option.\u001B[0m";
-    public static final String CUSTOMER_DASHBOARD_OPTIONS = "[1] List all products \n[2] Search for product by ID \n[3] Search for product by keyword \n[4] View cart \n[0] Exit";
+    public static final String CUSTOMER_DASHBOARD_OPTIONS = "[1] List all products \n[2] Search for product by ID \n[3] Search for product by keyword \n[4] View cart \n [5] Back \n[0] Exit";
     public static final String CUSTOMER_PRODUCT_OPTION = "[1] Previous Page \t [2] Next Page \t [3] Add to cart \t[4] View Cart/ Checkout \t[5] Back \t[0] Exit";
     public static final String CUSTOMER_PRODUCT_SEARCH_OPTION = "[1] Previous Page \t [2] Next Page \t [3] Add to cart \t[4] View Cart/ Checkout \t[5] Back \t[0] Exit";
     public static final String CUSTOMER_SINGLE_PRODUCT_OPTION = "[1] Add product to cart \t [2] View cart \t [3] Remove product from cart \t[4] Checkout \t[0] Exit";
@@ -48,6 +52,6 @@ public final class Message {
     public static final String ITEM_REMOVED_FROM_CART_SUCCESS = "Item removed from cart successfully!";
     public static final String EXIT_SYSTEM_WARNING = "You have typed in the exit character (0/e/exit), system will now terminate!";
     public static final String NUMERIC_VALUE_REQUIRED_WARNING = "Numeric value required";
-    public static final String PRODUCT_META_INFO = "[Current page no: %s] %%% [Total pages: %s] %%% [Total products: %s]";
+    public static final String PRODUCT_META_INFO = "[Current page no: %s] :::: [Total pages: %s] :::: [Total products: %s]";
 
 }
